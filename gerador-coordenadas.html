@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geocoding Service</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <div id="floating-panel">
+      <input id="address" type="textbox" value="Pelotas, RS">
+      <input id="submit" type="button" value="Geocode">
+    </div>
+    <script>
+      function init() {
+        var geocoder = new google.maps.Geocoder();
+
+        document.getElementById('submit').addEventListener('click', function() {
+          geocodeAddress(geocoder);
+        });
+      }
+
+      function geocodeAddress(geocoder) {
+        var address = document.getElementById('address').value;
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === 'OK') {
+            console.log('Latitude: ' + results[0].geometry.location.lat() + '\nLongitude: ' + results[0].geometry.location.lng());
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      }
+    </script>
+
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDl9SQUHc8U-eJgyXZQ1uVcjxYfyXX-XMc&callback=init">
+    </script>
+  </body>
+</html>
