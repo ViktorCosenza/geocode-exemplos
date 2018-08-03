@@ -10,7 +10,7 @@ var options = {
 };
  
 var geocoder = NodeGeocoder(options);
- 
+var address = "Pelotas, RS";
 // Using callback
 geocoder.geocode(address, function(err, res) {
   if (err){ 
