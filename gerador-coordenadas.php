@@ -1,33 +1,20 @@
-<script language ="javascript"> src = "gerador_coordenadas.js" </script>
+<?PHP
+    //Para testar, altere o endereço abaixo 
+    echo getCoordinates('Pelotas, RS');
+    
+    function getCoordinates($address){
+ 
+        $address = str_replace(" ", "+", $address); // replace all the white space with "+" sign to match with google   search pattern
+ 
+        $url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=$address";
+ 
+        $response = file_get_contents($url);
+        
 
-<?php
-$servername = "SERVERNAME";
-$username = "username";
-$password = "password";
-$dbname = "rfleck10";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    $count = "SELECT COUNT(*) FROM table_name;
-    for($id = 0; $i < $count; $i++){
-        $sql = "SELECT adress FROM table_name WHERE Id = " . $id . "LIMIT 1;";
-        $res = $conn->query($sql);
-        $adress = $res->fetch_assoc()["adress"];
-        // CHAMA API DO MAPS
-
-        // UPDATE adress SET coordinates 
-        $sql = "UPDATE adress SET coordinates" . $lat . " ". $lng . "WHERE Id = " . $id . ";";
-        if ($conn->query($sql) === TRUE) {
-            echo "Record updated successfully";
-        } else {
-            echo "Error updating record: " . $conn->error;
+        $json = json_decode($response,TRUE); //generate array object from the response from the web
+        if(empty($json['results'])){
+            return 'Cannot find address';
         }
+        return ($json['results'][0]['geometry']['location']['lat'].",".$json['results'][0]['geometry']['location']['lng']);
     }
-
-$conn->close();
 ?>
